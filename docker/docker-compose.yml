@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  php-workspace:
+    container_name: php-workspace
+    build: 
+      context: ./php
+      dockerfile: Dockerfile
+    env_file:
+      - .docker.env
+    volumes:
+      - ${PHP_PROJECT_WORKSPACE_PATH}:/var/www/
+    networks:
+      - stringee
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ${PHP_PROJECT_WORKSPACE_PATH}:/var/www/
+      - ./nginx/sites:/etc/nginx/sites-available/
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - stringee          
+
+networks:
+  stringee:
+    driver: bridge     
+        
